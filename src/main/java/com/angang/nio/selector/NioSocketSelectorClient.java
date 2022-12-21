@@ -1,12 +1,11 @@
-package com.angang.nio;
+package com.angang.nio.selector;
 
-import cn.hutool.core.util.StrUtil;
-
-import java.io.*;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Random;
 
-public class NioSocketClient {
+public class NioSocketSelectorClient {
     public static void main(String[] args) throws Exception {
         Socket socket = new Socket("localhost", 8889);
 
@@ -15,7 +14,7 @@ public class NioSocketClient {
         PrintWriter pw = new PrintWriter(os);
         Random random = new Random();
         int i = random.nextInt(100);
-        pw.write("我是客户端" + i);
+        pw.write("我是nio selector客户端" + i);
         pw.flush();
 
         socket.shutdownOutput();

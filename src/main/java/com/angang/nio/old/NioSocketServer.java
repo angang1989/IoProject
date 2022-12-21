@@ -1,4 +1,4 @@
-package com.angang.nio;
+package com.angang.nio.old;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,14 +18,20 @@ public class NioSocketServer {
     static List<SocketChannel> channelList = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
+        // 创建nio ServerSocketChannel
         ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+        // 绑定端口
         serverSocketChannel.socket().bind(new InetSocketAddress(8889));
         //设置为非阻塞
         serverSocketChannel.configureBlocking(false);
 
-        System.out.println("服务端启动成功");
+        System.out.println("nio原始版本服务端启动成功");
 
+        //初始版本
+        //问题1：while循环空转 cpu占用率100%
+        //问题2：channelList中的元素每次都全量遍历 优化：1.每次都遍历有数据收发的集合 2.如果没有数据收发 把线程阻塞住
         while (true) {
+            // nio的实现是由操作系统内部实现的 底层调用了linux内核的accept函数
             SocketChannel socketChannel = serverSocketChannel.accept();
 
             if(Objects.nonNull(socketChannel)) {
